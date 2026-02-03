@@ -2,7 +2,6 @@ package org.example.sms.controller;
 
 import org.example.sms.dto.StudentRequestDto;
 import org.example.sms.dto.StudentResponseDto;
-import org.example.sms.model.StudentModel;
 import org.example.sms.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
