@@ -1,5 +1,8 @@
 package org.example.sms.service;
 
+import org.example.sms.dto.StudentRequestDto;
+import org.example.sms.dto.StudentResponseDto;
+import org.example.sms.exception.StudentNotFoundException;
 import org.example.sms.model.StudentModel;
 import org.example.sms.repository.StudentRepository;
 import org.springframework.stereotype.Service;
@@ -11,39 +14,60 @@ public class StudentService {
 
     private final StudentRepository repository;
 
-
-    public StudentService(StudentRepository repository){
+    public StudentService(StudentRepository repository) {
 
         this.repository = repository;
 
     }
 
     // create
-    public StudentModel addStudent(StudentModel student){
+    public StudentResponseDto addStudent(StudentRequestDto dto) {
 
-        return repository.save(student);
+        StudentModel student = new StudentModel();
+        student.setName(dto.getName());
+        student.setAge(dto.getAge());
+        student.setEmail(dto.getEmail());
 
+        StudentModel savedStudent = repository.save(student);
+
+        return new StudentResponseDto(
+                savedStudent.getId(),
+                savedStudent.getName(),
+                savedStudent.getAge(),
+                savedStudent.getEmail());
     }
 
-    //display students
+    // display students
 
-    public List<StudentModel> getStudent(){
-        return repository.findAll();
+    public List<StudentResponseDto> getStudent() {
+        return repository.findAll().stream().map(student -> new StudentResponseDto(
+                student.getId(),
+                student.getName(),
+                student.getAge(),
+                student.getEmail())).toList();
     }
 
-    public StudentModel updateStudent(String id , StudentModel student){
+    public StudentResponseDto updateStudent(String id, StudentRequestDto dto) {
 
-        StudentModel existingStudent = repository.findById(id).orElseThrow( () -> new RuntimeException("No student found with this id") );
-        existingStudent.setName(student.getName());
-        existingStudent.setAge(student.getAge());
-        existingStudent.setEmail(student.getEmail());
+        StudentModel existingStudent = repository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("No student found with this id"));
+        existingStudent.setName(dto.getName());
+        existingStudent.setAge(dto.getAge());
+        existingStudent.setEmail(dto.getEmail());
 
-        return repository.save(existingStudent);
+        StudentModel savedStudent = repository.save(existingStudent);
+
+        return new StudentResponseDto(
+                savedStudent.getId(),
+                savedStudent.getName(),
+                savedStudent.getAge(),
+                savedStudent.getEmail());
     }
 
-    public String deleteStudent(String id){
+    public String deleteStudent(String id) {
 
-        StudentModel student = repository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
+        StudentModel student = repository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student not found"));
 
         repository.delete(student);
 

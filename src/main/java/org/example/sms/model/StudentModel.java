@@ -1,15 +1,18 @@
 package org.example.sms.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document( collection = "SMS2")
+@Document(collection = "SMS")
 public class StudentModel {
 
     @Id
@@ -18,7 +21,5 @@ public class StudentModel {
     private String name;
     private int age;
     private String email;
-
-
 
 }
