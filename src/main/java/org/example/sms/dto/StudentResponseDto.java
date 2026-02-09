@@ -1,9 +1,8 @@
 package org.example.sms.dto;
 
 public record StudentResponseDto(
-        String id,
-        String name,
-        int age,
-        String email) {
-
+                String id,
+                String name,
+                int age,
+                String email) {
 }
