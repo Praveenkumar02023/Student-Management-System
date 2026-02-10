@@ -22,4 +22,13 @@ public class JWTutil {
                 .compact();
     }
 
+    public String validateTokenAndGetEmail(String token) {
+        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
 }
